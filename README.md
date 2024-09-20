@@ -35,8 +35,8 @@ This project is supported by the .....
 [Display Text](URL)
 # Developers and Researchers info 
 
-- ![Sergio's avatar](https://github.com/sergiosierram.png?size=50)
-- ![Nathalia's avatar](https://github.com/NathaliaCespedesG.png?size=50) 
+![Sergio's avatar](https://github.com/sergiosierram.png?size=50) ![Nathalia's avatar](https://github.com/NathaliaCespedesG.png?size=50) 
+
 [Translational Machine Intelligence Lab](https://tmi-lab.github.io)
 
 

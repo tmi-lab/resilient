@@ -7,7 +7,9 @@ This repository is dedicated to the development of Resilient, a digital platform
 git clone https://github.com/NathaliaCespedesG/Resilient-shared
 </pre>
 2.Install Python .. for convenience
+
 3.Create a virtual environment for the project (optional, Instructions for macOS and Linux).
+
 3.1 Install virtualenv (if not already installed)
 <pre>
   pip install virtualenv

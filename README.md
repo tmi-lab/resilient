@@ -28,3 +28,15 @@ git clone https://github.com/NathaliaCespedesG/Resilient-shared
 </pre>
 
 # Resilient architeture
+
+# Acknowledgment
+This project is supported by the .....
+
+[Display Text](URL)
+# Developers and Researchers info 
+
+[Sergio Sierra](https://github.com/sergiosierram)
+[Nathalia Cespedes](https://github.com/johndoe)
+[Translational Machine Intelligence Lab](https://tmi-lab.github.io)
+
+

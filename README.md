@@ -1,5 +1,5 @@
 # Resilient-shared
-This repository is dedicated to the development of Resilient, a digital platform designed to integrate data from wearable devices. The platform generates comprehensive digital reports and provides clinical visualisations of daily health parameters, offering users meaningful insights into their health.
+This repository is dedicated to the development of Resilient, a digital platform designed to integrate data from wearable devices. The platform generates comprehensive digital reports and provides clinical visualisations of daily health parameters, offering users meaningful insights into their health. To have detailed info for each module in Resilient platform please go to the README files inside each module.
 
 <h2> Usage </h2>
 1.Clone the repository

@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="" target="_blank"><img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient.svg" alt="Resilient Logo" width=400"></a>
+  <a href="" target="_blank"><img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient.svg" alt="Resilient Logo" width="400"></a>
   <br>
   Resilient Open Source Repository
 </h1>

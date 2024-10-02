@@ -71,7 +71,7 @@ git clone https://github.com/NathaliaCespedesG/Resilient-shared
 # Resilient architeture
 
 # Acknowledgment
-This project is supported by the ..... UKDRI, Resilient PROTECT Grant, Imperial College, NHS Surrey and Border
+This project is supported by the UKRI Engineering and Physical Sciences Research Council (EPSRC) PROTECT Project (grant number: EP/W031892/1).
 
 [Display Text](URL)
 # Developers and Researchers info 

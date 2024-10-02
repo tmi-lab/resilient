@@ -80,6 +80,38 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
 # Build
 
 # Releases
+<div class="releases-section">
+    <h2>Releases</h2>
+    <div class="release">
+        <h3>Version 1.2.0</h3>
+        <p><strong>Release Date:</strong> September 29, 2024</p>
+        <ul>
+            <li>New feature: Added API integration for reports.</li>
+            <li>Improved database performance.</li>
+            <li>Bug fix: Fixed issue with login flow.</li>
+        </ul>
+        <a href="https://github.com/your-repo/releases/tag/v1.2.0" class="release-link">View on GitHub</a>
+    </div>
+    
+    <div class="release">
+        <h3>Version 1.1.0</h3>
+        <p><strong>Release Date:</strong> August 14, 2024</p>
+        <ul>
+            <li>Added user authentication module.</li>
+            <li>Updated frontend styles for the dashboard.</li>
+        </ul>
+        <a href="https://github.com/your-repo/releases/tag/v1.1.0" class="release-link">View on GitHub</a>
+    </div>
+    
+    <div class="release">
+        <h3>Version 1.0.0</h3>
+        <p><strong>Release Date:</strong> July 1, 2024</p>
+        <ul>
+            <li>Initial release with core functionality.</li>
+        </ul>
+        <a href="https://github.com/your-repo/releases/tag/v1.0.0" class="release-link">View on GitHub</a>
+    </div>
+</div>
 
 
 

@@ -49,7 +49,7 @@ Resilient uses a modular architecture based on containers. The following image s
 </div>
 
 
-<h2> Requirements </h2>
+# Requirements 
 1.Clone the repository
 <pre>
 git clone https://github.com/tmi-lab/resilient.github.io.git

@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="" target="_blank"><img src="./assets/resilient.svg" alt="Resilient Logo" width=400"></a>
+  <a href="" target="_blank"><img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient.svg" alt="Resilient Logo" width=400"></a>
   <br>
   Resilient Open Source Repository
 </h1>
@@ -71,7 +71,7 @@ git clone https://github.com/NathaliaCespedesG/Resilient-shared
 # Resilient architeture
 Resilient uses a modular architecture based on containers. The following image summarises it:
 <div align="center">
-  <img src="./assets/resilient_architecture.png" alt="Resilient Architecture" width="700">
+  <img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient_architecture.png" alt="Resilient Architecture" width="700">
 </div>
 
 # Acknowledgment

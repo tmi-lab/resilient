@@ -1,14 +1,13 @@
 # Database Backend
 
+### 2. **This module is aimed at managing the database API and reports API.**
 
-### 2. **This module is aimed at manage the database api and reports api. **
 # Folder Structure
 
 root-folder
 │
 ├── api (database api)
 ├── reports (reports api)
-└── utils
+├── utils
 └── ...
 └── manage.py
-

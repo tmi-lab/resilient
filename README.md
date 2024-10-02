@@ -76,8 +76,11 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
 </pre>
 
 #Run
+1.
 #Build
+2.
 #Releases
+3.
 
 
 # Acknowledgment

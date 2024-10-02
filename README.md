@@ -75,12 +75,12 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
  pip install -r requirements
 </pre>
 
-#Run
-1.
-#Build
-2.
-#Releases
-3.
+# Run
+
+# Build
+
+# Releases
+
 
 
 # Acknowledgment

@@ -50,13 +50,13 @@ Resilient uses a modular architecture based on containers. The following image s
 
 
 # Requirements 
-1.Clone the repository
+1. Clone the repository
 <pre>
 git clone https://github.com/tmi-lab/resilient.github.io.git
 </pre>
-2.Install Python .. for convenience
+2. Install Python .. for convenience
 
-3.Create a virtual environment for the project (optional, Instructions for macOS and Linux).
+3. Create a virtual environment for the project (optional, Instructions for macOS and Linux).
 
 3.1 Install virtualenv (if not already installed)
 <pre>
@@ -74,6 +74,10 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
 <pre>
  pip install -r requirements
 </pre>
+
+#Run
+#Build
+#Releases
 
 
 # Acknowledgment

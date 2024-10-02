@@ -1,0 +1,99 @@
+
+.dashboard-option-header .search-bar {
+  width: 100%;
+}
+
+.participant-icon{
+  width: 32px;
+}
+
+.icon-column{
+  width: 40px;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.username-bar {
+  width: 100% !important;
+}
+
+.dashboard-option-header .search-bar-no-icon > input {
+  font-size: 1rem !important;
+}
+
+::ng-deep.add-participant-button {
+  height: 44px;
+  justify-content: space-between;
+  border-radius: 0.75rem;
+  background-color: rgb(37, 46, 201);
+  width: 20vw;
+  padding: 0 1.25rem 0 1.25rem;
+}
+
+::ng-deep.add-participant-button:active {
+  background-color: rgb(94, 139, 229) !important;
+}
+
+::ng-deep.add-participant-button:hover {
+  background-color: rgb(33, 99, 235);
+}
+
+.dialog-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+::ng-deep.custom-spinner{
+  height: 40px;
+}
+
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+  animation: custom-spinner 0.1s ease-in-out infinite
+}
+
+@keyframes custom-spinner {
+  100%,
+  0% {
+      stroke: rgb(37, 46, 201);
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.devices-cell{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.devices-cell-icon{
+  height: auto;
+  width: 40px;
+}
+
+:host ::ng-deep .p-datatable thead > tr > th:first-child {
+  border-top-left-radius: 10px;
+}
+
+:host ::ng-deep .p-datatable thead > tr > th:last-child {
+  border-top-right-radius: 10px;
+}
+
+::ng-deep.p-datatable thead > tr > th {
+  background-color: black;
+  color: white;
+}
+
+::ng-deep.p-sortable-column-icon {
+  color: white;
+}

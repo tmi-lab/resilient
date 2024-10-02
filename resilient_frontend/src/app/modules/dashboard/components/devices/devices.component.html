@@ -1,0 +1,48 @@
+<div class="dashboard-option-wrapper animate-fade-in animate-delay-300">
+  <h1>Devices</h1>
+
+  <div class="dashboard-option-header">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Type participant's username"
+        class=""
+        [(ngModel)]="usernameFilter"
+        (input)="applyUsernameFilter()"
+      />
+      <div class="absolute left-4 flex items-center justify-center">
+        <mat-icon>search</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-option-body h-full w-full">
+    <p-table
+      [value]="filteredDevices"
+      [rowHover]="true"
+      [paginator]="true"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+      <ng-template pTemplate="header">
+          <tr>
+              <th [pSortableColumn]="'device_type'" style="width: 15vw">Type<p-sortIcon field="device_type"></p-sortIcon></th>
+              <th [pSortableColumn]="'is_active'">Active<p-sortIcon field="is_active"></p-sortIcon></th>
+              <th [pSortableColumn]="'username'">Username<p-sortIcon field="username"></p-sortIcon></th>
+              <th [pSortableColumn]="'updated_at'">Created at<p-sortIcon field="updated_at"></p-sortIcon></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-device>
+          <tr>
+              <td class="icon-column">
+                <img class="devices-cell-icon" [src]="icons[device.device_type].path">
+              </td>
+              <td>{{device.is_active}}</td>
+              <td>{{device.user.username}}</td>
+              <td>{{device.updated_at}}</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </div>
+

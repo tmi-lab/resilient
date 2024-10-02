@@ -1,0 +1,31 @@
+<div class="dashboard-wrapper">
+  <p-toast></p-toast>
+  <h1 class="text-white text-4xl font-bold text-center mb-4 animate-fade-in-up animate-delay-300">
+    Welcome to Resilient
+  </h1>
+
+  <div class="dashboard-options-grid animate-fade-in animate-delay-300">
+
+    <a (click)="onClickOption('participants')" style="cursor: pointer;">
+      <div class="dashboard-option">
+        <img src="./../../../assets/icons/participants-icon.svg">
+        <h2>Participants</h2>
+      </div>
+    </a>
+
+    <a (click)="onClickOption('reports')" style="cursor: pointer;">
+      <div class="dashboard-option">
+        <img src="./../../../assets/icons/reports-icon.svg">
+        <h2>Reports</h2>
+      </div>
+    </a>
+
+    <a (click)="onClickOption('devices')" style="cursor: pointer;">
+      <div class="dashboard-option">
+        <img src="./../../../assets/icons/devices-icon.svg">
+        <h2>Devices</h2>
+      </div>
+    </a>
+
+  </div>
+</div>

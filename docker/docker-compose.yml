@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  frontend:
+    image: sergiosierraic/resilient-frontend:v0.0.2
+    ports:
+      - "7901:80"
+    depends_on:
+      - database_backend
+  database_backend:
+    image: sergiosierraic/resilient-database-backend:v0.0.2
+    env_file:
+      - vars.env

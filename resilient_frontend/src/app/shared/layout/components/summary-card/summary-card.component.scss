@@ -1,0 +1,40 @@
+.summary-card {
+  display: flex;
+  padding: .5rem;
+  border: solid 1px rgb(209, 213, 217);
+  border-radius: 6px;
+  gap: 1vw;
+  align-items: center;
+  transition: .5s;
+
+  .icon {
+    width: 3vw;
+    height: 1vw;
+    transition: .5s;
+    border-radius: 1vw;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    font-size: small;
+  }
+}
+
+.summary-card.selected {
+  background: #3B82F6;
+  border-color: #3B82F6;
+  color: #ffffff;
+  transition: .5s;
+
+  .icon img {
+    filter: brightness(0) invert(1);
+    transition: .5s;
+  }
+}
+
+p {
+  margin: 0;
+}

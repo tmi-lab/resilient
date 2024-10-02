@@ -1,0 +1,21 @@
+<header class="bg-transparent text-white py-4 px-8 flex justify-between items-center">
+  <!-- Logo -->
+  <div class="flex flex-row items-center">
+    <a  href="/">
+      <img src='./../assets/resilient-logo.svg' alt="Project Logo" class="h-10">
+    </a>
+    @if (userSignedIn) {
+      <p class="text-2xl font-sans font-bold px-4">Resilient</p>
+    }
+  </div>
+
+  <!-- Sign In Button -->
+  @if (!userSignedIn) {
+    <p-button styleClass="sign-button" (click)="onClickSignIn()" label="Sign In"></p-button>
+  } @else {
+    <div class="flex flex-row items-center">
+      <mat-icon class="px-12">home </mat-icon>
+      <mat-icon>person</mat-icon>
+    </div>
+  }
+</header>

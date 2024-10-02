@@ -1,0 +1,54 @@
+<div class="dashboard-option-wrapper animate-fade-in animate-delay-300">
+  <h1>Reports</h1>
+
+  <div class="dashboard-option-header">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Type participant's username"
+        class=""
+        [(ngModel)]="usernameFilter"
+        (input)="applyUsernameFilter()"
+      />
+      <div class="absolute left-4 flex items-center justify-center">
+        <mat-icon>search</mat-icon>
+      </div>
+    </div>
+    <p-button styleClass="add-button" (click)="showCreateReporttModal()" label="Create report">
+      <div class="flex items-center justify-center">
+        <mat-icon>add_circle</mat-icon>
+      </div>
+      <!-- <span>Add participant</span> -->
+    </p-button>
+  </div>
+
+  <div class="dashboard-option-body h-full w-full">
+    <p-table
+      [value]="filteredParticipants"
+      [rowHover]="true"
+      [paginator]="true"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      >
+      <ng-template pTemplate="header">
+          <tr>
+              <th ></th>
+              <th [pSortableColumn]="'username'">Type<p-sortIcon field="type"></p-sortIcon></th>
+              <th [pSortableColumn]="'role'">Username<p-sortIcon field="username"></p-sortIcon></th>
+              <th [pSortableColumn]="'updated_at'">Created at<p-sortIcon field="updated_at"></p-sortIcon></th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-report>
+          <tr>
+              <td class="icon-column">
+                <img class="report-icon" src="./../../../assets/icons/report-table-icon.svg">
+              </td>
+              <td>{{report.type}}</td>
+              <td>{{report.username}}</td>
+              <td>{{report.updated_at}}</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </div>
+

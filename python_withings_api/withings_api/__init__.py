@@ -1,0 +1,691 @@
+"""
+Python library for the Withings Health API.
+
+Withings Health API
+<https://developer.health.withings.com/api>
+"""
+from abc import abstractmethod
+import datetime
+import json
+import hmac
+import hashlib
+
+from types import LambdaType
+from typing import Any, Callable, Dict, Iterable, Optional, Union, cast
+
+import arrow
+from oauthlib.common import to_unicode
+from oauthlib.oauth2 import WebApplicationClient
+from requests import Response
+from requests_oauthlib import OAuth2Session
+from typing_extensions import Final
+
+from .common import (
+    AuthScope,
+    Credentials2,
+    CredentialsType,
+    GetActivityField,
+    GetSleepField,
+    GetSleepSummaryField,
+    HeartGetResponse,
+    HeartListResponse,
+    MeasureGetActivityResponse,
+    MeasureGetIntraActivityResponse,
+    MeasureGetMeasGroupCategory,
+    MeasureGetMeasResponse,
+    MeasureType,
+    NotifyAppli,
+    NotifyGetResponse,
+    NotifyListResponse,
+    SleepGetResponse,
+    SleepGetSummaryResponse,
+    UserGetDeviceResponse,
+    maybe_upgrade_credentials,
+    response_body_or_raise,
+)
+
+DateType = Union[arrow.Arrow, datetime.date, datetime.datetime, int, str]
+ParamsType = Dict[str, Union[str, int, bool]]
+
+
+def update_params(
+    params: ParamsType, name: str, current_value: Any, new_value: Any = None
+) -> None:
+    """Add a conditional param to a params dict."""
+
+    if current_value is None:
+        return
+
+    if isinstance(new_value, LambdaType):
+        params[name] = new_value(current_value)
+    else:
+        params[name] = new_value or current_value
+
+
+def adjust_withings_token(response: Response) -> Response:
+    """Restructures token from withings response::
+
+        {
+            "status": [{integer} Withings API response status],
+            "body": {
+                "access_token": [{string} Your new access_token],
+                "expires_in": [{integer} Access token expiry delay in seconds],
+                "token_type": [{string] HTTP Authorization Header format: Bearer],
+                "scope": [{string} Scopes the user accepted],
+                "refresh_token": [{string} Your new refresh_token],
+                "userid": [{string} The Withings ID of the user]
+            }
+        }
+    """
+    try:
+        token = json.loads(response.text)
+    except Exception:  # pylint: disable=broad-except
+        # If there was exception, just return unmodified response
+        return response
+    status = token.pop("status", 0)
+    if status:
+        # Set the error to the status
+        token["error"] = 0
+    body = token.pop("body", None)
+    if body:
+        # Put body content at root level
+        token.update(body)
+    # pylint: disable=protected-access
+    response._content = to_unicode(json.dumps(token)).encode("UTF-8")
+
+    return response
+
+
+class AbstractWithingsApi:
+    """Abstract class for customizing which requests module you want."""
+
+    URL: Final = "https://wbsapi.withings.net"
+    PATH_V2_USER: Final = "v2/user"
+    PATH_V2_MEASURE: Final = "v2/measure"
+    PATH_V2_MEASURE_INTRA: Final = "v2/measure  "
+    PATH_MEASURE: Final = "measure"
+    PATH_V2_SLEEP: Final = "v2/sleep"
+    PATH_NOTIFY: Final = "notify"
+    PATH_V2_HEART: Final = "v2/heart"
+    PATH_V2_RAWDATA: Final = "v2/rawdata"
+
+    @abstractmethod
+    def _request(
+        self, path: str, params: Dict[str, Any], method: str = "GET"
+    ) -> Dict[str, Any]:
+        """Fetch data from the Withings API."""
+        print(method)
+
+    def request(
+        self, path: str, params: Dict[str, Any], method: str = "GET"
+    ) -> Dict[str, Any]:
+        """Request a specific service."""
+        return response_body_or_raise(
+            self._request(method=method, path=path, params=params)
+        )
+
+    def request_post(
+        self, path: str, params: Dict[str, Any], method: str = "GET"
+    ) -> Dict[str, Any]:
+
+        return cast(
+            Dict[str, Any],
+            self._client.request(
+                method=method,
+                url="%s/%s" % (self.URL.strip("/"), path.strip("/")),
+                params=params,
+            ).json(),
+        )
+
+
+
+    def user_get_device(self) -> UserGetDeviceResponse:
+        """
+        Get user device.
+
+        Some data related to user profile are available through those services.
+        """
+        return(self.request(path=self.PATH_V2_USER, params={"action": "getdevice"})
+        )
+
+    def measure_get_activity(
+        self,
+        data_fields: Iterable[GetActivityField] = GetActivityField,
+        startdateymd: Optional[DateType] = arrow.utcnow(),
+        enddateymd: Optional[DateType] = arrow.utcnow(),
+        #offset: Optional[int] = None,
+        lastupdate: Optional[DateType] = arrow.utcnow(),
+    ) -> MeasureGetActivityResponse:
+        """Get user created activities."""
+        params: Final[ParamsType] = {}
+
+        update_params(
+            params,
+            "startdateymd",
+            startdateymd,
+            lambda val: arrow.get(val).format("YYYY-MM-DD"),
+        )
+        update_params(
+            params,
+            "enddateymd",
+            enddateymd,
+            lambda val: arrow.get(val).format("YYYY-MM-DD"),
+        )
+        #update_params(params, "offset", offset)
+        update_params(
+            params,
+            "data_fields",
+            data_fields,
+            lambda fields: ",".join([field.value for field in fields]),
+        )
+        update_params(
+            params, "lastupdate", lastupdate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(params, "action", "getactivity")
+
+        return MeasureGetActivityResponse(
+            **self.request(path=self.PATH_V2_MEASURE, params=params)
+        )
+
+
+    def measure_get_intraactivity(
+        self,
+        #data_fields: Iterable[GetActivityField] = GetActivityField,
+        startdate: Optional[DateType] = arrow.utcnow(),
+        enddate: Optional[DateType] = arrow.utcnow(),
+    ) -> MeasureGetIntraActivityResponse:
+        """Get user created activities."""
+        params: Final[ParamsType] = {}
+
+        update_params(params,"startdate",startdate,lambda val: arrow.get(val).int_timestamp)
+        update_params(params,"enddate",enddate,lambda val: arrow.get(val).int_timestamp)
+        update_params(params, "action", 'getintradayactivity')
+
+        return(self.request(path=self.PATH_V2_MEASURE, params=params)
+        )
+
+
+    def activate_raw_data(
+        self,
+        hash_deviceid: str,
+        rawdata_type: int,
+        enddate: Optional[DateType] = arrow.utcnow()
+        ):
+
+        #This function allows to activate Raw Data Collection. The raw data
+        #capture when the watch is able to sync with the Withings app following
+        #the API call. The capture will stop automatically at the enddate provided
+        #in the API call
+
+        print(enddate)
+        print(rawdata_type)
+
+        params: Final[ParamsType] = {}
+
+        update_params(params,"hash_deviceid", hash_deviceid)
+        update_params(params,"rawdata_type",rawdata_type)
+        update_params(params,"enddate",enddate,lambda val: arrow.get(val).int_timestamp)
+        update_params(params, "action", 'activate')
+
+        return(self.request_post(path=self.PATH_V2_RAWDATA, params=params, method = "POST")
+        )
+
+    def deactivate_raw_data(
+        self,
+        hash_deviceid: str,
+        rawdata_type: int):
+        #This function allows the de-activation of data collection.
+
+        params: Final[ParamsType] = {}
+
+        update_params(params,"hash_deviceid", hash_deviceid)
+        update_params(params,"rawdata_type",rawdata_type)
+        update_params(params, "action", 'deactivate')
+
+        return(self.request_post(path=self.PATH_V2_RAWDATA, params=params, method = "POST")
+        )
+
+
+    def get_raw_data(
+        self,
+        hash_deviceid: str,
+        rawdata_type: int,
+        startdate: Optional[DateType] = arrow.utcnow(),
+        enddate: Optional[DateType] = arrow.utcnow(),
+        offset: Optional[int] = None
+        ):
+
+        #This function allows to fetch Raw of an specific type. 
+
+        params: Final[ParamsType] = {}
+
+        update_params(params,"hash_deviceid", hash_deviceid)
+        update_params(params,"rawdata_type",rawdata_type)
+        update_params(params,"startdate",startdate,lambda val: arrow.get(val).int_timestamp)
+        
+
+        update_params(params,"enddate",enddate,lambda val: arrow.get(val).int_timestamp)
+        update_params(params, "offset", offset)
+        update_params(params, "action", 'get')
+
+        #print(params)
+
+        return(self.request_post(path=self.PATH_V2_RAWDATA, params=params, method = "POST")
+        )
+    
+
+
+    def measure_get_meas(
+        self,
+        meastype: Optional[MeasureType] = None,
+        category: Optional[MeasureGetMeasGroupCategory] = None,
+        startdate: Optional[DateType] = arrow.utcnow(),
+        enddate: Optional[DateType] = arrow.utcnow(),
+        offset: Optional[int] = None,
+        lastupdate: Optional[DateType] = arrow.utcnow(),
+    ) -> MeasureGetMeasResponse:
+        """Get measures."""
+        params: Final[ParamsType] = {}
+
+        update_params(params, "meastype", meastype, lambda val: val.value)
+        update_params(params, "category", category, lambda val: val.value)
+        update_params(
+            params, "startdate", startdate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(
+            params, "enddate", enddate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(params, "offset", offset)
+        update_params(
+            params, "lastupdate", lastupdate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(params, "action", "getmeas")
+
+        print('Im getting measures from here', params)
+        
+        return MeasureGetMeasResponse(
+            **self.request(path=self.PATH_MEASURE, params=params)
+        )
+
+
+    def sleep_get(
+        self,
+        data_fields: Iterable[GetSleepField],
+        startdate: Optional[DateType] = arrow.utcnow(),
+        enddate: Optional[DateType] = arrow.utcnow(),
+    ):
+        """Get sleep data."""
+        params: Final[ParamsType] = {}
+
+        update_params(
+            params, "startdate", startdate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(
+
+            params, "enddate", enddate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(
+            params,
+            "data_fields",
+            data_fields,
+            lambda fields: ",".join([field.value for field in fields]),
+        )
+        update_params(params, "action", "get")
+
+        return (self.request(path=self.PATH_V2_SLEEP, params=params))
+
+    def sleep_get_summary(
+        self,
+        data_fields: Iterable[GetSleepSummaryField],
+        startdateymd: Optional[DateType] = arrow.utcnow(),
+        enddateymd: Optional[DateType] = arrow.utcnow(),
+        offset: Optional[int] = None,
+        lastupdate: Optional[DateType] = arrow.utcnow(),
+    ) -> SleepGetSummaryResponse:
+        """Get sleep summary."""
+        params: Final[ParamsType] = {}
+
+        update_params(
+            params,
+            "startdateymd",
+            startdateymd,
+            lambda val: arrow.get(val).format("YYYY-MM-DD"),
+        )
+        update_params(
+            params,
+            "enddateymd",
+            enddateymd,
+            lambda val: arrow.get(val).format("YYYY-MM-DD"),
+        )
+        update_params(
+            params,
+            "data_fields",
+            data_fields,
+            lambda fields: ",".join([field.value for field in fields]),
+        )
+        update_params(params, "offset", offset)
+        update_params(
+            params, "lastupdate", lastupdate, lambda val: arrow.get(val).int_timestamp
+        )
+        update_params(params, "action", "getsummary")
+
+        return SleepGetSummaryResponse(
+            **self.request(path=self.PATH_V2_SLEEP, params=params)
+        )
+
+    def heart_get(self, signalid: int) -> HeartGetResponse:
+        """Get ECG recording."""
+        params: Final[ParamsType] = {}
+
+        update_params(params, "signalid", signalid)
+        update_params(params, "action", "get")
+
+        return HeartGetResponse(**self.request(path=self.PATH_V2_HEART, params=params))
+
+    def heart_list(
+        self,
+        startdate: Optional[DateType] = arrow.utcnow(),
+        enddate: Optional[DateType] = arrow.utcnow(),
+        offset: Optional[int] = None,
+    ) -> HeartListResponse:
+        """Get heart list."""
+        params: Final[ParamsType] = {}
+
+        update_params(
+            params, "startdate", startdate, lambda val: arrow.get(val).int_timestamp,
+        )
+        update_params(
+            params, "enddate", enddate, lambda val: arrow.get(val).int_timestamp,
+        )
+        update_params(params, "offset", offset)
+        update_params(params, "action", "list")
+
+        return HeartListResponse(**self.request(path=self.PATH_V2_HEART, params=params))
+
+    def notify_get(
+        self, callbackurl: str, appli: Optional[NotifyAppli] = None
+    ) -> NotifyGetResponse:
+        """
+        Get subscription.
+
+        Return the last notification service that a user was subscribed to,
+        and its expiry date.
+        """
+        params: Final[ParamsType] = {}
+
+        update_params(params, "callbackurl", callbackurl)
+        update_params(params, "appli", appli, lambda appli: appli.value)
+        update_params(params, "action", "get")
+
+        return NotifyGetResponse(**self.request(path=self.PATH_NOTIFY, params=params))
+
+    def notify_list(self, appli: Optional[NotifyAppli] = None) -> NotifyListResponse:
+        """List notification configuration for this user."""
+        params: Final[ParamsType] = {}
+
+        update_params(params, "appli", appli, lambda appli: appli.value)
+        update_params(params, "action", "list")
+
+        return NotifyListResponse(**self.request(path=self.PATH_NOTIFY, params=params))
+
+    def notify_revoke(
+        self, callbackurl: Optional[str] = None, appli: Optional[NotifyAppli] = None
+    ) -> None:
+        """
+        Revoke a subscription.
+
+        This service disables the notification between the API and the
+        specified applications for the user.
+        """
+        params: Final[ParamsType] = {}
+
+        update_params(params, "callbackurl", callbackurl)
+        update_params(params, "appli", appli, lambda appli: appli.value)
+        update_params(params, "action", "revoke")
+
+        self.request(path=self.PATH_NOTIFY, params=params)
+
+    def notify_subscribe(
+        self,
+        callbackurl: str,
+        appli: Optional[NotifyAppli] = None,
+        comment: Optional[str] = None,
+    ) -> None:
+        """Subscribe to receive notifications when new data is available."""
+        params: Final[ParamsType] = {}
+
+        update_params(params, "callbackurl", callbackurl)
+        update_params(params, "appli", appli, lambda appli: appli.value)
+        update_params(params, "comment", comment)
+        update_params(params, "action", "subscribe")
+
+        self.request(path=self.PATH_NOTIFY, params=params)
+
+    def notify_update(
+        self,
+        callbackurl: str,
+        appli: NotifyAppli,
+        new_callbackurl: str,
+        new_appli: Optional[NotifyAppli] = None,
+        comment: Optional[str] = None,
+    ) -> None:
+        """Update the callbackurl and or appli of a created notification."""
+        params: Final[ParamsType] = {}
+
+        update_params(params, "callbackurl", callbackurl)
+        update_params(params, "appli", appli, lambda appli: appli.value)
+        update_params(params, "new_callbackurl", new_callbackurl)
+        update_params(params, "new_appli", new_appli, lambda new_appli: new_appli.value)
+        update_params(params, "comment", comment)
+        update_params(params, "action", "update")
+
+        self.request(path=self.PATH_NOTIFY, params=params)
+
+
+
+
+
+
+
+
+
+class WithingsAuth:
+    """Handles management of oauth2 authorization calls."""
+
+    URL: Final = "https://account.withings.com"
+    PATH_AUTHORIZE: Final = "oauth2_user/authorize2"
+    PATH_V2_OAUTH2: Final = "v2/oauth2"
+    PATH_V2_SIGNATURE = "v2/signature"
+
+    def __init__(
+        self,
+        client_id: str,
+        consumer_secret: str,
+        callback_uri: str,
+        scope: Iterable[AuthScope] = tuple(),
+        mode: Optional[str] = None,
+    ):
+        """Initialize new object."""
+        self._client_id: Final = client_id
+        self._consumer_secret: Final = consumer_secret
+        self._callback_uri: Final = callback_uri
+        self._scope: Final = scope
+        self._mode: Final = mode
+        self._session: Final = OAuth2Session(
+            self._client_id,
+            redirect_uri=self._callback_uri,
+            scope=",".join((scope.value for scope in self._scope)),
+        )
+        self._session.register_compliance_hook(
+            "access_token_response", adjust_withings_token
+        )
+        self._session.register_compliance_hook(
+            "refresh_token_response", adjust_withings_token
+        )
+
+    def get_authorize_url(self) -> str:
+        """Generate the authorize url."""
+        url: Final = str(
+            self._session.authorization_url(
+                "%s/%s" % (WithingsAuth.URL, self.PATH_AUTHORIZE)
+            )[0]
+        )
+
+        if self._mode:
+            return url + "&mode=" + self._mode
+
+        return url
+
+    def get_credentials(self, code: str) -> Credentials2:
+        """Get the oauth credentials."""
+        response: Final = self._session.fetch_token(
+            "%s/%s" % (AbstractWithingsApi.URL, self.PATH_V2_OAUTH2),
+            code=code,
+            client_secret=self._consumer_secret,
+            include_client_id=True,
+            action="requesttoken",
+        )
+
+        return Credentials2(
+            **{
+                **response,
+                **dict(
+                    client_id=self._client_id, consumer_secret=self._consumer_secret
+                ),
+            }
+        )
+
+
+class WithingsApi(AbstractWithingsApi):
+    """
+    Provides entrypoint for calling the withings api.
+
+    While withings-api takes care of automatically refreshing the OAuth2
+    token so you can seamlessly continue making API calls, it is important
+    that you persist the updated tokens somewhere associated with the user,
+    such as a database table. That way when your application restarts it will
+    have the updated tokens to start with. Pass a ``refresh_cb`` function to
+    the API constructor and we will call it with the updated token when it gets
+    refreshed.
+
+    class WithingsUser:
+        def refresh_cb(self, creds):
+            my_savefn(creds)
+
+    user = ...
+    creds = ...
+    api = WithingsApi(creds, refresh_cb=user.refresh_cb)
+    """
+
+    def __init__(
+        self,
+        credentials: CredentialsType,
+        refresh_cb: Optional[Callable[[Credentials2], None]] = None,
+    ):
+        """Initialize new object."""
+        self._credentials = maybe_upgrade_credentials(credentials)
+        self._refresh_cb: Final = refresh_cb or self._blank_refresh_cb
+        token: Final = {
+            "access_token": self._credentials.access_token,
+            "refresh_token": self._credentials.refresh_token,
+            "token_type": self._credentials.token_type,
+            "expires_in": self._credentials.expires_in,
+        }
+
+        self._client: Final = OAuth2Session(
+            self._credentials.client_id,
+            token=token,
+            client=WebApplicationClient(  # nosec
+                self._credentials.client_id,
+                token=token,
+                default_token_placement="query",
+            ),
+            auto_refresh_url="%s/%s" % (self.URL, WithingsAuth.PATH_V2_OAUTH2),
+            auto_refresh_kwargs={
+                "action": "requesttoken",
+                "client_id": self._credentials.client_id,
+                "client_secret": self._credentials.consumer_secret,
+            },
+            token_updater=self._update_token,
+        )
+        self._client.register_compliance_hook(
+            "access_token_response", adjust_withings_token
+        )
+        self._client.register_compliance_hook(
+            "refresh_token_response", adjust_withings_token
+        )
+
+    def _blank_refresh_cb(self, creds: Credentials2) -> None:
+        """The default callback which does nothing."""
+
+    def get_credentials(self) -> Credentials2:
+        """Get the current oauth credentials."""
+        return self._credentials
+
+    def refresh_token(self) -> None:
+        """Manually refresh the token."""
+        token_dict: Final = self._client.refresh_token(
+            token_url=self._client.auto_refresh_url
+        )
+        self._update_token(token=token_dict)
+
+    def _update_token(self, token: Dict[str, Union[str, int]]) -> None:
+        """Set the oauth token."""
+        self._credentials = Credentials2(
+            access_token=token["access_token"],
+            expires_in=token["expires_in"],
+            token_type=self._credentials.token_type,
+            refresh_token=token["refresh_token"],
+            userid=self._credentials.userid,
+            client_id=self._credentials.client_id,
+            consumer_secret=self._credentials.consumer_secret,
+        )
+
+        self._refresh_cb(self._credentials)
+
+
+    def get_signature(    
+        self,
+        timestamp: Optional[DateType] = arrow.utcnow()
+    ):
+        """Get signature"""
+        params: Final[ParamsType] = {}
+
+        update_params(params,"client_id",self._credentials.client_id)
+        update_params(params,"timestamp",arrow.get(timestamp).int_timestamp)
+        update_params(params, "action", 'getnonce')
+
+        # Get the signature paramater for USER v2 -Get
+
+        sign_array = ["getnonce", str(self._credentials.client_id), str(arrow.get(timestamp).int_timestamp)]
+
+        str_sign  = ','.join(sign_array)
+
+        signature = hmac.new(
+            bytes(self._credentials.consumer_secret, 'latin-1'),
+            msg = bytes(str_sign, 'latin-1'),
+            digestmod = hashlib.sha256
+            ).hexdigest()
+
+
+        update_params(params, "signature", signature)
+
+        return(self._request(path= WithingsAuth.PATH_V2_SIGNATURE, params=params))
+
+
+
+
+
+    def _request(
+        self, path: str, params: Dict[str, Any], method: str = "GET"
+    ) -> Dict[str, Any]:
+
+        print("%s/%s" % (self.URL.strip("/"), path.strip("/")))
+        return cast(
+            Dict[str, Any],
+            self._client.request(
+                method=method,
+                url="%s/%s" % (self.URL.strip("/"), path.strip("/")),
+                params=params,
+            ).json(),
+        )

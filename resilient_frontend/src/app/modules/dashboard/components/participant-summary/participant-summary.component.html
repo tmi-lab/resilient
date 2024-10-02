@@ -1,0 +1,41 @@
+<div class="dashboard-option-wrapper animate-fade-in animate-delay-300" style="padding: 3%;">
+
+  <header class="header">
+
+    <div class="participant-summary w-full">
+      <h1>{{participantData.username}}</h1>
+      <p>User since: {{participantData.createdAt}}</p>
+    </div>
+
+    <button pButton
+      type="button"
+      class="p-button-rounded p-button-outlined p-button-secondary"
+      icon="pi pi-times"
+      (click)="closeParticipantSummary()">
+    </button>
+
+  </header>
+
+  <!-- <p-selectButton
+    [options]="summaryOptions"
+    [(ngModel)]="selectedOption"
+    optionLabel="name"
+    [multiple]="false"
+    (onOptionClick)="onSummaryOptionClick()">
+  </p-selectButton> -->
+
+  <div class="body h-full w-full">
+    <div>
+      <p>Scale</p>
+    </div>
+    <div>
+      <p>Scale</p>
+    </div>
+    <div>
+      <p>Scale</p>
+    </div>
+  </div>
+
+
+
+</div>

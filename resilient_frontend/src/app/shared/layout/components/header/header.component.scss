@@ -1,0 +1,14 @@
+::ng-deep.sign-button{
+  background-color: none;
+  background: none;
+  border: none;
+  border-radius: 0.75rem
+}
+
+::ng-deep.sign-button:active {
+  background-color: rgb(94, 139, 229) !important;
+}
+
+::ng-deep.sign-button:hover {
+  background-color: rgb(33, 99, 235);
+}

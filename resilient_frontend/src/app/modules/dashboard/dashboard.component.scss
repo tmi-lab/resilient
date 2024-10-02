@@ -1,0 +1,86 @@
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-items: center;
+  padding: 0 5vw 0 5vw ;
+  width: 100vw;
+  height: 80vh;
+  justify-content: safe;
+}
+
+.dashboard-wrapper > h1 {
+  padding: 5vh 0 5vh 0;
+  margin: 0 5vw;
+}
+
+.dashboard-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10vw;
+}
+
+.dashboard-options-grid > * {
+  padding: 1rem;
+}
+
+.dashboard-option {
+  padding: 1rem;
+  width: 220px;
+  aspect-ratio: 1;
+  background-color: white;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  --tw-shadow-color: rgb(71 85 105 / 0.6);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  --tw-shadow: var(--tw-shadow-colored);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.dashboard-option:hover {
+  --tw-shadow-color: rgb(35,61,110);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.dashboard-option:active {
+  box-shadow:
+    inset -2px -2px 3px rgb(255 255 255 / 60%),
+    inset 2px 2px 3px rgb(0 0 0 / 60%);
+}
+
+.dashboard-option > img {
+  margin-top: 1rem;
+  height: 100px;
+  width: auto;
+}
+
+.dashboard-option > h2 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .dashboard-option {
+    width: 280px;
+    aspect-ratio: 3/1;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: flex-start;
+  }
+
+  .dashboard-option > img {
+    margin: 0 0 0 20px;
+    padding: 0;
+    width: 50px;
+    height: auto;
+  }
+
+}

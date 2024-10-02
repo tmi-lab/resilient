@@ -1,0 +1,11 @@
+<div class="summary-card" (click)="onCardClick()" [ngClass]="{ 'selected': !deviceField.hidden}">
+
+  <div class="icon" [style.background-color]="deviceField.color">
+  </div>
+
+  <div class="info">
+    <p>{{deviceField.label}}</p>
+    <p>{{deviceField.units}}</p>
+  </div>
+
+</div>

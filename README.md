@@ -42,7 +42,14 @@ This repository is dedicated to the development of Resilient, a digital platform
   
 </details>
 
-<h2> Usage </h2>
+# architeture
+Resilient uses a modular architecture based on containers. The following image summarises it:
+<div align="center">
+  <img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient_architecture.png" alt="Resilient Architecture" width="700">
+</div>
+
+
+<h2> Requirements </h2>
 1.Clone the repository
 <pre>
 git clone https://github.com/tmi-lab/resilient.github.io.git
@@ -68,11 +75,6 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
  pip install -r requirements
 </pre>
 
-# architeture
-Resilient uses a modular architecture based on containers. The following image summarises it:
-<div align="center">
-  <img src="https://raw.githubusercontent.com/tmi-lab/resilient.github.io/a3a1691184cd34304d0fd7955bd0d3e701c71f79/assets/resilient_architecture.png" alt="Resilient Architecture" width="700">
-</div>
 
 # Acknowledgment
 This project is supported by the UKRI Engineering and Physical Sciences Research Council (EPSRC) PROTECT Project (grant number: EP/W031892/1).

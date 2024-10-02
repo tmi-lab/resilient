@@ -69,6 +69,9 @@ git clone https://github.com/NathaliaCespedesG/Resilient-shared
 </pre>
 
 # Resilient architeture
+Resilient uses a modular architecture based on containers. The following image summarises it:
+
+<img src="./assets/resilient_architecture.svg" alt="Resilient Architecture" width=400">
 
 # Acknowledgment
 This project is supported by the UKRI Engineering and Physical Sciences Research Council (EPSRC) PROTECT Project (grant number: EP/W031892/1).

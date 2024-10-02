@@ -2,6 +2,8 @@
 
 ### 2. **This module is aimed at managing the database API and reports API.**
 
+
+```markdown
 # Folder Structure
 
 root-folder

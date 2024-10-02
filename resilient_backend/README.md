@@ -3,8 +3,7 @@
 ### 2. **This module is aimed at managing the database API and reports API.**
 
 
-```markdown
-# Folder Structure
+Folder Structure
 
 root-folder
 │
@@ -13,3 +12,8 @@ root-folder
 ├── utils
 └── ...
 └── manage.py
+
+# End of Folder Structure
+
+---
+

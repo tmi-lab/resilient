@@ -77,7 +77,7 @@ Resilient uses a modular architecture based on containers. The following image s
 # Acknowledgment
 This project is supported by the UKRI Engineering and Physical Sciences Research Council (EPSRC) PROTECT Project (grant number: EP/W031892/1).
 
-[Display Text](URL)
+
 # Developers and Researchers info 
 
 ![Sergio's avatar](https://github.com/sergiosierram.png?size=50) ![Nathalia's avatar](https://github.com/NathaliaCespedesG.png?size=50) 

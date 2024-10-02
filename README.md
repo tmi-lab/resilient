@@ -86,7 +86,7 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
         <h3>Version 1.0.0</h3>
         <p><strong>Release Date:</strong> October 1, 2024</p>
         <ul>
-            <li>Initial release with core functionality.</li>
+            <li>Initial release - ongoing dvelopment.</li>
         </ul>
     </div>
 </div>

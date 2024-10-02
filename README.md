@@ -92,25 +92,6 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
         </ul>
         <a href="https://github.com/your-repo/releases/tag/v1.2.0" class="release-link">View on GitHub</a>
     </div>
-    
-    <div class="release">
-        <h3>Version 1.1.0</h3>
-        <p><strong>Release Date:</strong> August 14, 2024</p>
-        <ul>
-            <li>Added user authentication module.</li>
-            <li>Updated frontend styles for the dashboard.</li>
-        </ul>
-        <a href="https://github.com/your-repo/releases/tag/v1.1.0" class="release-link">View on GitHub</a>
-    </div>
-    
-    <div class="release">
-        <h3>Version 1.0.0</h3>
-        <p><strong>Release Date:</strong> July 1, 2024</p>
-        <ul>
-            <li>Initial release with core functionality.</li>
-        </ul>
-        <a href="https://github.com/your-repo/releases/tag/v1.0.0" class="release-link">View on GitHub</a>
-    </div>
 </div>
 
 

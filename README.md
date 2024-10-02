@@ -71,7 +71,7 @@ git clone https://github.com/NathaliaCespedesG/Resilient-shared
 # Resilient architeture
 Resilient uses a modular architecture based on containers. The following image summarises it:
 <div align="center">
-  <img src="./assets/resilient_architecture.png" alt="Resilient Architecture" width=400">
+  <img src="./assets/resilient_architecture.png" alt="Resilient Architecture" width=600">
 </div>
 
 # Acknowledgment

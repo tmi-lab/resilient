@@ -45,7 +45,7 @@ This repository is dedicated to the development of Resilient, a digital platform
 <h2> Usage </h2>
 1.Clone the repository
 <pre>
-git clone https://github.com/NathaliaCespedesG/Resilient-shared
+git clone https://github.com/tmi-lab/resilient.github.io.git
 </pre>
 2.Install Python .. for convenience
 

@@ -75,22 +75,16 @@ git clone https://github.com/tmi-lab/resilient.github.io.git
  pip install -r requirements
 </pre>
 
-# Run
-
-# Build
-
 # Releases
 <div class="releases-section">
-    <h2>Releases</h2>
     <div class="release">
         <h3>Version 1.0.0</h3>
         <p><strong>Release Date:</strong> October 1, 2024</p>
         <ul>
-            <li>Initial release - ongoing dvelopment.</li>
+            <li>Initial release - ongoing development.</li>
         </ul>
     </div>
 </div>
-
 
 
 # Acknowledgment

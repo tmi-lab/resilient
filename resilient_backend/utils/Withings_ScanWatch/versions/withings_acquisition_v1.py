@@ -21,20 +21,17 @@ from urllib import parse
 from typing_extensions import Final
 import pandas as pd
 
+
 #Module: Data utilities module - preprocessing of the data 
-
-import data_utils.data_utils as data_utils
+import utils.Withings_ScanWatch.data_utils.data_utils as data_utils
 # Module: Database libraries to save Users' data 
-import db.database as database
+import utils.Withings_ScanWatch.db.database as database
 #Module : Databasde Django api
-
-import db.database_django as database_api
-
+import utils.Withings_ScanWatch.db.database_django as database_api
 #Module: Graphics generation class
-import resources.Graph_generation as graph
+import utils.Withings_ScanWatch.resources.Graph_generation as graph
 # Module: PDF generation class to generate the reports 
-import resources.PDF_generation as pdf_gen
-
+import utils.Withings_ScanWatch.resources.PDF_generation as pdf_gen
 
 #This code is an adaptation of the following repository: https://github.com/vangorra/python_withings_api
 #With libraries and methods modified.

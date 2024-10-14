@@ -95,9 +95,13 @@ class SleepmatSummary(models.Model):
     duration_to_sleep = models.FloatField(null=True, blank=True)
     duration_to_wakeup = models.FloatField(null=True, blank=True)
     average_heart_rate = models.FloatField(null=True, blank=True)
+    hr_max = models.FloatField(null=True, blank=True)
+    hr_min = models.FloatField(null=True, blank=True)
     light_sleep_duration = models.FloatField(null=True, blank=True)
     rem_sleep_duration = models.FloatField(null=True, blank=True)
     average_rr = models.IntegerField(null=True, blank=True)
+    rr_max = models.FloatField(null=True, blank=True)
+    rr_min = models.FloatField(null=True, blank=True)
     sleep_score = models.FloatField(null=True, blank=True)
     wakeup_count = models.FloatField(null=True, blank=True)
     wakeup_duration = models.FloatField(null=True, blank=True)
@@ -106,10 +110,12 @@ class SleepmatSummary(models.Model):
     awake_in_bed = models.FloatField(null=True, blank=True)
     apnea = models.FloatField(null=True, blank=True)
     out_of_bed_count = models.FloatField(null=True, blank=True)
-    hr_date_af = models.DateTimeField(null=True, blank=True)
+    hr_date_af = models.DateField(null=True, blank=True)
     hr_af = models.FloatField(null=True, blank=True)
-    hr_date_rr = models.DateTimeField(null=True, blank=True)
+    hr_date_rr = models.DateField(null=True, blank=True)
     hr_rr = models.FloatField(null=True, blank=True)
+    snoring_episodes = models.FloatField(null=True, blank=True)
+    snoring_time = models.FloatField(null=True, blank=True)
 
 
 class Report(models.Model):

@@ -150,7 +150,8 @@ class Database_API(object):
         else:
             # Unsuccessful response
             print('GET request failed:', response.status_code)
-        return(scale_dict)
+        filtered_data = {'scales': [item for item in scale_dict['scales'] if start_date <= arrow.get(item['date']).datetime <= end_date]}
+        return(filtered_data)
 
     def get_scanwatch_summary_data(self,user = None, start_date = None, end_date = None):
         url = self.backend_url + '/api/scanwatches/summary/' + '?username=' + user
@@ -162,13 +163,14 @@ class Database_API(object):
             print('GET request successful')
             # Accessing the response data
             scanwatch_dict = response.json()  # Assuming the response is JSON data
-            #print(scanwatch_dict)   
+            #print(scanwatch_dict)
+                
         else:
             # Unsuccessful response
             print('GET request failed:', response.status_code)
 
         # Filter data based on start_date and end_date
-        filtered_data = {'scanwatches_summary': [item for item in scanwatch_dict['scanwatches_summary'] if end_date <= arrow.get(item['date']).datetime <= start_date]}
+        filtered_data = {'scanwatches_summary': [item for item in scanwatch_dict['scanwatches_summary'] if start_date <= arrow.get(item['date']).datetime <= end_date]}
         
         return(filtered_data)
     
@@ -180,17 +182,15 @@ class Database_API(object):
         if response.status_code == 200:
                 print('GET request successful')
                 # Accessing the response data
-                scanwatch_intra_dict = response.json()  # Assuming the response is JSON data
-                #print(scanwatch_intra_dict)
+                scanwatch_intra_dict = response.json()  # Assuming the response is JSON data      
         else:
             # Unsuccessful response
             print('GET request failed:', response.status_code)
-
         # Filter data based on start_date and end_date
         filtered_data = [{'date_heart_rate': item['date_heart_rate'], 
                           'heart_rate': item['heart_rate']} 
                           for item in scanwatch_intra_dict["scanwatches_intraactivity"] 
-                          if item['date_heart_rate'] is not None and start_date <= item['date_heart_rate'] <= end_date]
+                          if item['date_heart_rate'] is not None and start_date <= item['date_heart_rate'] <= end_date]        
         return(filtered_data)
     
     def get_sleep_summary_data(self, user = None, start_date = None, end_date = None):
@@ -205,7 +205,6 @@ class Database_API(object):
         else:
             # Unsuccessful response
             print('GET request failed:', response.status_code)
-
         # Filter data based on start_date and end_date
         filtered_data = [{'date': item['date'],
                           'breathing_disturbances': item['breathing_disturbances'],
@@ -230,7 +229,7 @@ class Database_API(object):
                           'hr_date_rr': item['hr_date_rr'],
                           'hr_af': item['hr_af'],
                           'hr_rr': item['hr_rr']
-                          } for item in sleep_summary_dict["sleepmats_summary"] if start_date <= arrow.get(item['date']).datetime <= end_date]
+                          } for item in sleep_summary_dict["sleepmats_summary"] if start_date <= arrow.get(item['date']).datetime <= end_date] 
         return(filtered_data)
     
     def get_sleep_intra_activity_data(self, user = None, start_date = None, end_date = None):
@@ -241,11 +240,10 @@ class Database_API(object):
         if response.status_code == 200:
                 print('GET request successful')
                 # Accessing the response data
-                sleep_intra_day_dict = response.json()  # Assuming the response is JSON data   
+                sleep_intra_day_dict = response.json()  # Assuming the response is JSON data
         else:
             # Unsuccessful response
             print('GET request failed:', response.status_code)
-
         # Filter data based on start_date and end_date
         filtered_data = [{'start_date': item['start_date'],
                           'end_date': item['end_date'],
@@ -260,7 +258,6 @@ class Database_API(object):
                           'sdnn_1': item['sdnn_1'],
                           'device': item['device'],
                           } for item in sleep_intra_day_dict["sleepmats_intraactivity"] if start_date <= item['date_heart_rate']<= end_date]
-        
         return(filtered_data)
     
     def upload_scanwatch_summary_data(self, user = None, watch_id= None, date = None, hr_i = None,
@@ -475,5 +472,3 @@ class Database_API(object):
                 response = requests.post(url, json=data)
                 print(response)
     
-    def cleaning(self, table_type = None):
-        pass

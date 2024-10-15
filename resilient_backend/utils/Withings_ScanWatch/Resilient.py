@@ -146,7 +146,6 @@ class Resilient(object):
                 self.reports_resilient.db_filling()
                 if self.version == "v2":
                     self.reports_resilient.db_api_filling()
-                
                 #reports_resilient.db_cleaning()
                 print(id_report)
             

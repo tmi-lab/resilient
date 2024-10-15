@@ -323,15 +323,13 @@ class Devices_OAuth2flow(object):
 		self.activity_data['date'], self.activity_data['hr_min'] = self.data_utils.data_cleaning(self.activity_data['date'],self.activity_data['hr_min'])
 		self.activity_data['hr_max'] = [x.hr_max for x in self.meas_activity.activities]
 		self.activity_data['date'], self.activity_data['hr_max'] = self.data_utils.data_cleaning(self.activity_data['date'],self.activity_data['hr_max'])
-
-		self.intra_activitydata(type_time = "current")
-
+		self.final_hr = self.data_utils.backup_data(value2 = self.activity_data['heart_rate'], value1 = self.hr_based_sleep)
 		#Previous Week
 		self.pre_activity_data['heart_rate'] = [x.hr_average for x in self.prev_meas_activity.activities]
 		self.pre_activity_data['steps'] = [x.steps for x in self.prev_meas_activity.activities]
 
 	def intra_activitydata_watch(self, type_time = None):
-
+		type_time = "current"
 		watch_data = []
 		self.HR_watch = []
 		self.steps_watch = []
@@ -350,7 +348,6 @@ class Devices_OAuth2flow(object):
 			starting_day = self.starting_day_c 
 			ending_day = self.ending_day_c
 			#print('Endind date', ending_day)
-
 		if type_time == "prev":
 			starting_day = self.starting_day_p
 			ending_day = self.ending_day_p
@@ -359,9 +356,6 @@ class Devices_OAuth2flow(object):
 
 		try:
 			week_days.append(week_days[-1]+1)
-			
-			total = abs(starting_day) - abs(ending_day)
-
 			for i in range (len(week_days)):
 
 				self.meas_intraactivity = self.api.measure_get_intraactivity(startdate= arrow.utcnow().shift(days= week_days[i]).replace(hour=0, minute=0, second=0), enddate=arrow.utcnow().shift(days = week_days[i]+1).replace(hour=0, minute=0, second=0))
@@ -383,7 +377,6 @@ class Devices_OAuth2flow(object):
 				self.dates_calories.append(dates_c)
 				self.calories_watch.append(calories_watch_data)
 				time.sleep(2.5)
-
 			#self.small_test(dates_to_test)
 			self.HR_watch = sum(self.HR_watch,[])
 			self.steps_watch = sum(self.steps_watch,[])
@@ -395,24 +388,19 @@ class Devices_OAuth2flow(object):
 			#dates_steps = [int(x) for x in dates_steps]
 			self.dates_calories = sum(self.dates_calories,[])
 			#dates_calories = [int(x) for x in dates_calories]
-
 			if type_time == "current":
 				start_dates_hr = self.wakeup_hours
 				end_dates_hr = self.fellasleep_hours
 				self.hr_based_sleep = self.data_utils.hr_average_basedon_sleep(dates = dates_to_test, HR = hr_to_test, startdates = start_dates_hr, enddates = end_dates_hr )
-				self.final_hr = self.data_utils.backup_data(value2 = self.activity_data['heart_rate'], value1 = self.hr_based_sleep)
-
 			if type_time == "prev":
 				start_dates_hr = self.wakeup_hours_prev
 				end_dates_hr = self.fellasleep_hours_prev
-
 				if start_dates_hr == []:
 					print('No data for the week')
 					self.final_hr_prev = []
 				else:
 					self.hr_based_sleep_prev = self.data_utils.hr_average_basedon_sleep(dates = dates_to_test, HR = hr_to_test, startdates = start_dates_hr, enddates = end_dates_hr )
 					self.final_hr_prev = self.data_utils.backup_data(value2 = self.pre_activity_data['heart_rate'], value1 = self.hr_based_sleep_prev)
-					
 				return(self.final_hr_prev)
 
 		except IndexError:
@@ -767,11 +755,8 @@ class Devices_OAuth2flow(object):
 		self.database.SM.cleaning_cvs_files(cvs_from ='Intra_watch')
 		self.database.SM.cleaning_cvs_files(cvs_from ='Intra_sleep')
 
-
-
 	# The following function is to fill the table inf the PDF
 	def table_filler(self):
-
 		if self.report_type == 1:
 			#Sleep
 			self.HR_Sleep_table = ([self.hr_mean_bu, self.prev_heart_rate, []])
@@ -783,7 +768,6 @@ class Devices_OAuth2flow(object):
 			self.Weight_table = (self.weight, [],[])
 
 			#ScanWatch
-			self.prev_hr = self.intra_activitydata(type_time = 'prev')
 			self.HR_table = ([self.final_hr, self.prev_hr, []]) 
 			self.Steps_table = ([self.activity_data['steps'], self.pre_activity_data['steps'], []])
 

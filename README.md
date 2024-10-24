@@ -27,7 +27,7 @@
 </div>
 
 
-This repository is dedicated to the development of Resilient, a digital platform designed to integrate data from wearable devices. The platform generates comprehensive digital reports and provides clinical visualisations of daily health parameters, offering users meaningful insights into their health. To have detailed info for each module in Resilient platform please go to the README files inside each module.
+This repository is dedicated to the development of Resilient, a digital platform designed to integrate data from remote healthcare monitoring devices. The platform generates comprehensive digital reports and provides clinical visualisations of daily health parameters, offering users meaningful insights into their health. For detailed information on each module in the Resilient platform, please refer to the README files inside each module.
 
 <details open="open">
 <summary > <h2 style="display:inline-block">📖 Contents</h2>  </summary>
